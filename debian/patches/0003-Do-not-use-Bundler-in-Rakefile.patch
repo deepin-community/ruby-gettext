@@ -1,0 +1,30 @@
+From: Hleb Valoshka <375GNU@Gmail.COM>
+Date: Sun, 17 Jun 2012 16:12:33 +0300
+Subject: Do not use Bundler in Rakefile
+
+---
+ Rakefile |   12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+--- a/Rakefile
++++ b/Rakefile
+@@ -21,18 +21,8 @@
+ require "yard"
+ require "gettext/version"
+ require "gettext/tools/task"
+-require "bundler/gem_helper"
+ 
+-class Bundler::GemHelper
+-  undef_method :version_tag
+-  def version_tag
+-    version
+-  end
+-end
+-
+-helper = Bundler::GemHelper.new(base_dir)
+-helper.install
+-spec = helper.gemspec
++spec = Gem::Specification.load('gettext.gemspec')
+ 
+ task :default => :test
+ 

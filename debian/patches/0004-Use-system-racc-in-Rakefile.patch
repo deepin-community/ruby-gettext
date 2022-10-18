@@ -1,0 +1,19 @@
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Bobbio?= <lunar@debian.org>
+Date: Tue, 7 May 2013 09:43:01 +0000
+Subject: Use system racc in Rakefile
+
+---
+ Rakefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/Rakefile
++++ b/Rakefile
+@@ -40,7 +40,7 @@
+ po_parser_ry_path = "src/po_parser.ry"
+ file po_parser_rb_path => po_parser_ry_path do
+   racc_spec = Gem::Specification.find_by_name("racc")
+-  racc = File.join(racc_spec.bin_dir, racc_spec.executable)
++  racc = "/usr/bin/racc"
+   tempfile = Tempfile.new("gettext-po-parser")
+   ruby(racc, "-g", po_parser_ry_path, "-o", tempfile.path)
+ 

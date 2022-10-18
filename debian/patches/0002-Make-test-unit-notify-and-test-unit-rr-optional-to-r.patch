@@ -1,0 +1,33 @@
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Bobbio?= <lunar@debian.org>
+Date: Sat, 16 Mar 2013 16:21:28 +0000
+Subject: Make test-unit-notify and test-unit-rr optional to run the tests
+
+---
+ test/run-test.rb |   16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+--- a/test/run-test.rb
++++ b/test/run-test.rb
+@@ -29,8 +29,20 @@
+ $LOAD_PATH.unshift(test_dir)
+ 
+ require "test-unit"
+-require "test/unit/notify"
+-require "test/unit/rr"
++begin
++  require "test/unit/notify"
++rescue LoadError
++  # Let's do without notifications
++end
++begin
++  require "test/unit/rr"
++rescue LoadError
++  # Include RR manually
++  require "rr"
++  class Test::Unit::TestCase
++    include RR::Adapters::TestUnit
++  end
++end
+ 
+ require "helper"
+ 

@@ -1,0 +1,129 @@
+From: Hleb Valoshka <375gnu@gmail.com>
+Date: Fri, 18 Aug 2017 16:51:12 +0300
+Subject: Wrap without breaking words
+
+New RegExp is provided by
+"Francesco Poli (wintermute)" <invernomuto@paranoici.org>
+
+in https://bugs.debian.org/cgi-bin/bugreport.cgi?att=2;bug=840878;filename=wrap-without-breaking-words.diff.gz;msg=5
+---
+ lib/gettext/po_entry.rb     |  2 +-
+ test/test_po_entry.rb       |  3 +--
+ test/tools/test_msgcat.rb   |  8 ++++----
+ test/tools/test_msgmerge.rb | 16 ++++++++--------
+ test/tools/test_xgettext.rb |  8 ++++----
+ 5 files changed, 18 insertions(+), 19 deletions(-)
+
+--- a/lib/gettext/po_entry.rb
++++ b/lib/gettext/po_entry.rb
+@@ -501,7 +501,7 @@
+             chunks << line
+           else
+             # TODO: use character width instead of the number of characters
+-            line.scan(/.{1,#{max_line_width}}/m) do |chunk|
++            line.scan(/.{1,#{max_line_width}}\z|\S{#{max_line_width},}|.{1,#{max_line_width - 1}}\s/m) do |chunk|
+               chunks << chunk
+             end
+           end
+--- a/test/test_po_entry.rb
++++ b/test/test_po_entry.rb
+@@ -694,8 +694,7 @@
+         assert_equal(<<-MESSAGE, format_message(message, :max_line_width => 4))
+ ""
+ "long"
+-" lin"
+-"e"
++"line"
+         MESSAGE
+       end
+ 
+--- a/test/tools/test_msgcat.rb
++++ b/test/tools/test_msgcat.rb
+@@ -366,8 +366,8 @@
+     def test_default
+       assert_equal(<<-PO, run_msgcat([@po]))
+ msgid ""
+-"long long long long long long long long long long long long long long long lin"
+-"e"
++"long long long long long long long long long long long long long long long "
++"line"
+ msgstr ""
+       PO
+     end
+@@ -385,8 +385,8 @@
+     def test_wrap
+       assert_equal(<<-PO, run_msgcat([@po], "--wrap"))
+ msgid ""
+-"long long long long long long long long long long long long long long long lin"
+-"e"
++"long long long long long long long long long long long long long long long "
++"line"
+ msgstr ""
+       PO
+     end
+--- a/test/tools/test_msgmerge.rb
++++ b/test/tools/test_msgmerge.rb
+@@ -681,15 +681,15 @@
+         assert_equal(<<-PO, File.read(@po_file_path))
+ #: hello.rb:1
+ msgid ""
+-"Hello very long line! This line is very long. Yes! This line is very long! Ver"
+-"y very long line!"
++"Hello very long line! This line is very long. Yes! This line is very long! "
++"Very very long line!"
+ msgstr ""
+ 
+ #: hello.rb:3
+ msgid "Good-bye"
+ msgstr ""
+-"Translated Good-bye. This translation is very long. Yes! Very long translation"
+-"!!!"
++"Translated Good-bye. This translation is very long. Yes! Very long "
++"translation!!!"
+         PO
+       end
+ 
+@@ -700,15 +700,15 @@
+         assert_equal(<<-PO, File.read(@po_file_path))
+ #: hello.rb:1
+ msgid ""
+-"Hello very long line! This line is very long. Yes! This line is very l"
+-"ong! Very very long line!"
++"Hello very long line! This line is very long. Yes! This line is very "
++"long! Very very long line!"
+ msgstr ""
+ 
+ #: hello.rb:3
+ msgid "Good-bye"
+ msgstr ""
+-"Translated Good-bye. This translation is very long. Yes! Very long tra"
+-"nslation!!!"
++"Translated Good-bye. This translation is very long. Yes! Very long "
++"translation!!!"
+         PO
+       end
+ 
+--- a/test/tools/test_xgettext.rb
++++ b/test/tools/test_xgettext.rb
+@@ -531,8 +531,8 @@
+ #{header}
+ #: ../lib/xgettext.rb:1
+ msgid ""
+-"Hello very long line! This line is very long. Yes! This line is very long! Ver"
+-"y very long line!"
++"Hello very long line! This line is very long. Yes! This line is very long! "
++"Very very long line!"
+ msgstr ""
+         POT
+       end
+@@ -542,8 +542,8 @@
+ #{header}
+ #: ../lib/xgettext.rb:1
+ msgid ""
+-"Hello very long line! This line is very long. Yes! This line is very l"
+-"ong! Very very long line!"
++"Hello very long line! This line is very long. Yes! This line is very "
++"long! Very very long line!"
+ msgstr ""
+         POT
+       end

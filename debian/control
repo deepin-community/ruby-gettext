@@ -1,0 +1,39 @@
+Source: ruby-gettext
+Maintainer: Debian Ruby Extras Maintainers <pkg-ruby-extras-maintainers@lists.alioth.debian.org>
+Uploaders: Hleb Valoshka <375gnu@gmail.com>,
+           Utkarsh Gupta <utkarsh@debian.org>
+Section: ruby
+Testsuite: autopkgtest-pkg-ruby
+Priority: optional
+Build-Depends: debhelper-compat (= 12),
+               gem2deb,
+               racc,
+               rake,
+               ruby-locale,
+               ruby-test-unit-rr,
+               ruby-text,
+               yard
+Standards-Version: 4.5.0
+Vcs-Browser: https://salsa.debian.org/ruby-team/ruby-gettext
+Vcs-Git: https://salsa.debian.org/ruby-team/ruby-gettext.git
+Homepage: https://ruby-gettext.github.io/
+XS-Ruby-Versions: all
+
+Package: ruby-gettext
+Architecture: all
+XB-Ruby-Versions: ${ruby:Versions}
+Depends: ruby | ruby-interpreter,
+         ruby-locale,
+         ruby-text,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Breaks: ruby-gettext-activerecord (<= 2.1.0-5~)
+Description: gettext for Ruby
+ This Ruby package is a localization library and toolset modeled after
+ GNU gettext, and with a similar simple API.
+ .
+ It provides:
+  * rxgettext - creates gettext-compatible PO files from Ruby scripts;
+  * rmsginit - create a new PO file with user's environment and input;
+  * rmsgfmt - creates a MO file from a PO file;
+  * rmsgmerge - extracts translatable strings from Ruby scripts.

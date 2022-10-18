@@ -1,0 +1,5 @@
+0001-Properly-handle-a-closed-stdin-when-prompting-in-msg.patch
+0002-Make-test-unit-notify-and-test-unit-rr-optional-to-r.patch
+0003-Do-not-use-Bundler-in-Rakefile.patch
+0004-Use-system-racc-in-Rakefile.patch
+0005-Wrap-without-breaking-words.patch

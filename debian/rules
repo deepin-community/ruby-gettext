@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --buildsystem=ruby --with ruby
+
+override_dh_auto_install:
+	# force rebuilding lib/gettext/po_parser.rb from source
+	touch src/po_parser.ry
+	# avoid rebuilding samples/**/*.mo though
+	find samples/ -name '*.mo' -exec touch '{}' ';'
+	# do the usual thing
+	LANG= LANGUAGE= LC_ALL= dh_auto_install
+
+override_dh_installchangelogs:
+	dh_installchangelogs doc/text/news.md -O--buildsystem=ruby

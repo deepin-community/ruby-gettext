@@ -1,0 +1,5 @@
+debian/rmsgcat.1
+debian/rmsgfmt.1
+debian/rmsginit.1
+debian/rmsgmerge.1
+debian/rxgettext.1
